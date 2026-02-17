@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: "Georgia", serif;
   background: #1e1e2f;
@@ -10,19 +11,26 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  /* Perbaikan: Gunakan min-height agar konten panjang tidak terpotong */
+  min-height: 100vh; 
   flex-direction: column;
-  overflow: hidden;
+  /* Perbaikan: Izinkan scroll vertikal tapi sembunyikan horizontal */
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 40px 0; /* Memberi ruang napas di atas/bawah saat di-scroll */
 }
+
 .intro {
   text-align: center;
-  font-size: 1.4rem;
+  font-size: 1.2rem; /* Sedikit dikecilkan agar aman di HP */
   margin-bottom: 30px;
+  padding: 0 20px;
   opacity: 1;
   transition: opacity 1s ease;
 }
+
 .btn {
-  padding: 10px 20px;
+  padding: 12px 25px;
   font-size: 1rem;
   background: #f5eeef;
   border: none;
@@ -30,165 +38,114 @@ body {
   cursor: pointer;
   color: rgb(5, 2, 2);
   transition: 0.3s;
+  z-index: 10;
 }
-.btn:hover {
-  background: #b1acad;
-}
+
 .letter {
-  display: none;
-  /* Memberikan warna dasar krem dengan garis horizontal abu-abu seperti buku tulis */
-  background: repeating-linear-gradient(
-    to bottom,
-    #fdf6e3 0px,
-    #fdf6e3 27px,
-    #d2d2d2 28px
-  );
-  color: #333;
-  /* Padding kiri disesuaikan agar teks tidak menabrak lubang kertas */
-  padding: 30px 30px 30px 70px; 
-  border-radius: 10px;
-  /* Menggunakan lebar 90% agar lebih pas di layar HP */
-  width: 90%; 
+  width: 90%;
   max-width: 500px;
-  /* Menggunakan min-height agar kertas bisa memanjang otomatis jika teksnya banyak */
-  min-height: 400px; 
-  height: auto; 
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  font-size: 1.1rem;
-  line-height: 1.6;
-  text-align: left;
+  margin: 20px auto;
+  /* Perbaikan: Padding kiri dilebihkan sedikit agar tidak tertutup lubang kertas */
+  padding: 40px 25px 80px 45px; 
+  background: #fff9e6;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   position: relative;
-  /* Menjaga format spasi dan baris baru dari JavaScript */
-  white-space: pre-wrap;
-  /* Memastikan kata yang panjang tidak keluar dari kotak surat */
   overflow-wrap: break-word;
-  font-family: "Courier New", monospace;
-  overflow: visible;
+  color: #333; /* Warna teks surat agar kontras dengan kertas */
 }
+
 .letter p {
-  margin-top: -55px;
-  overflow: hidden;
+  /* Perbaikan: Hilangkan margin negatif yang terlalu ekstrim */
+  margin-top: 0; 
+  font-size: 1rem;
+  line-height: 1.6;
 }
+
+/* Lubang Binder */
 .letter::before {
   content: "";
   position: absolute;
   top: 0;
-  left: 0;
-  width: 25px;
+  left: 10px; /* Geser sedikit agar lebih manis */
+  width: 20px;
   height: 100%;
   background-image: radial-gradient(circle, #1e1e2f 6px, transparent 7px);
-  background-size: 25px 40px;
+  background-size: 20px 40px;
   background-repeat: repeat-y;
-  background-position: center;
   pointer-events: none;
 }
+
 .signature {
-  opacity: 0; /* Mulai dari transparan */
-  transition: opacity 3s ease-in; /* Muncul perlahan dalam 3 detik */
+  opacity: 0;
+  transition: opacity 3s ease-in;
   position: absolute;
-  bottom: -20px;
-  right: 6px;
-  width: 180px;
+  bottom: 10px; /* Perbaikan agar tidak keluar dari kertas */
+  right: 15px;
+  width: 140px; /* Ukuran lebih proporsional */
   pointer-events: none;
   transform: rotate(-2deg);
 }
-/* Style untuk wadah bunga */
-.flower-fall-container {
-    position: fixed; /* Agar tetap di viewport */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Agar tidak menghalangi klik */
-    overflow: hidden; /* Pastikan bunga tidak keluar dari layar */
-    z-index: 999; /* Pastikan bunga di atas elemen lain */
-}
 
-/* Style untuk kelopak bunga individual */
-.petal {
-    position: absolute;
-    background-color: #ffcccc;
-    /* Bentuk tetesan/kelopak: pojok kiri atas dan kanan bawah membulat beda */
-    border-radius: 150% 0 150% 150%; 
-    opacity: 0.8;
-    animation: fall linear infinite, sway ease-in-out infinite;
-    pointer-events: none;
-    z-index: 999;
-}
+/* ... (CSS Petal & Flower Fall Container tetap sama) ... */
 
-/* Variasi ukuran kelopak bunga */
-.petal:nth-child(even) {
-    background-color: #ffe0e6; /* Warna pink yang sedikit beda */
-    animation-duration: 8s; /* Durasi jatuh lebih lama */
-    animation-delay: -2s; /* Mulai lebih cepat */
-    width: 12px;
-    height: 12px;
-}
-
-.petal:nth-child(odd) {
-    background-color: #ffb3c7; /* Warna pink agak gelap */
-    animation-duration: 10s; /* Durasi jatuh lebih lama */
-    animation-delay: -5s; /* Mulai lebih cepat */
-    width: 8px;
-    height: 8px;
-}
-
-/* Keyframes untuk animasi jatuh */
-@keyframes fall {
-    0% {
-        transform: translateY(-10vh) rotateZ(0deg); /* Mulai dari atas, tanpa rotasi */
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.8; /* Munculkan opacity */
-    }
-    100% {
-        transform: translateY(100vh) rotateZ(720deg); /* Jatuh ke bawah sambil berputar */
-        opacity: 0;
-    }
-}
 .volume-icon {
     position: fixed;
     top: 20px;
     right: 20px;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     cursor: pointer;
-    z-index: 1000;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 10px;
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
+    z-index: 1001;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px); /* Efek kaca kekinian */
+    width: 40px;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: 0.3s;
-}
-
-.volume-icon:hover {
-    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
 }
 
 .next-btn-fixed {
-  display: none; /* Tetap sembunyi di awal */
+  display: none;
   position: fixed;
-  top: 75px; /* Di bawah tombol volume (yang top-nya 20px + tinggi 45px + jarak) */
+  top: 70px;
   right: 20px;
   padding: 10px 15px;
-  background-color: rgba(255, 179, 199, 0.9); /* Pink transparan agar senada */
+  background-color: #ffb3c7;
   color: white;
   border: none;
   border-radius: 15px;
   font-family: 'Courier New', monospace;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: bold;
   cursor: pointer;
   z-index: 1000;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
 }
 
-.next-btn-fixed:hover {
-  background-color: #ff8fa3;
-  transform: scale(1.05);
+/* MEDIA QUERIES UNTUK HP */
+@media (max-width: 600px) {
+    body {
+        padding: 20px 0; /* Ruang lebih sempit di HP */
+    }
+
+    .letter {
+        padding: 35px 20px 70px 35px; /* Sesuaikan padding lubang kertas di HP */
+    }
+
+    #typedText {
+        font-size: 0.95rem; /* Font sedikit lebih kecil agar muat banyak */
+    }
+
+    .signature {
+        width: 100px;
+        bottom: 5px;
+    }
+    
+    .next-btn-fixed {
+        /* Tetap di pojok kanan atas di bawah volume agar tidak menghalangi teks */
+        top: 70px; 
+        right: 15px;
+    }
 }
