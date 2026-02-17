@@ -35,16 +35,35 @@ body {
   background: #b1acad;
 }
 .letter {
-    width: 90%; /* Gunakan persentase agar tidak melebar keluar layar HP */
-    max-width: 500px; /* Batas lebar maksimal di laptop */
-    margin: 20px auto;
-    padding: 30px 20px; /* Beri ruang agar teks tidak nempel ke pinggir */
-    background: #fff9e6;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    position: relative;
-    overflow-wrap: break-word; /* Paksa teks panjang untuk patah ke bawah */
-    min-height: 300px; /* Biar tetap ada ruang kalau teksnya sedikit */
+  display: none;
+  /* Memberikan warna dasar krem dengan garis horizontal abu-abu seperti buku tulis */
+  background: repeating-linear-gradient(
+    to bottom,
+    #fdf6e3 0px,
+    #fdf6e3 27px,
+    #d2d2d2 28px
+  );
+  color: #333;
+  /* Padding kiri disesuaikan agar teks tidak menabrak lubang kertas */
+  padding: 30px 30px 30px 70px; 
+  border-radius: 10px;
+  /* Menggunakan lebar 90% agar lebih pas di layar HP */
+  width: 90%; 
+  max-width: 500px;
+  /* Menggunakan min-height agar kertas bisa memanjang otomatis jika teksnya banyak */
+  min-height: 400px; 
+  height: auto; 
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  text-align: left;
+  position: relative;
+  /* Menjaga format spasi dan baris baru dari JavaScript */
+  white-space: pre-wrap;
+  /* Memastikan kata yang panjang tidak keluar dari kotak surat */
+  overflow-wrap: break-word;
+  font-family: "Courier New", monospace;
+  overflow: visible;
 }
 .letter p {
   margin-top: -55px;
@@ -172,26 +191,4 @@ body {
 .next-btn-fixed:hover {
   background-color: #ff8fa3;
   transform: scale(1.05);
-}
-
-@media (max-width: 600px) {
-    #typedText {
-        font-size: 14px; /* Kecilkan font sedikit di HP agar tidak meluber */
-        line-height: 1.6;
-    }
-
-    .letter {
-        padding: 20px 15px; /* Kurangi padding di HP */
-    }
-
-    .signature {
-        width: 80px; /* Kecilkan TTD di layar HP */
-    }
-    
-    .next-btn-fixed {
-        top: auto; /* Lepas posisi top */
-        bottom: 20px; /* Pindah ke bawah agar mudah dijangkau jempol di HP */
-        right: 20px;
-        font-size: 12px;
-    }
 }
