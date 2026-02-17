@@ -192,3 +192,37 @@ body {
   background-color: #ff8fa3;
   transform: scale(1.05);
 }
+
+@media screen and (max-width: 600px) {
+    body {
+        padding: 15px; /* Memberi ruang di pinggir layar */
+    }
+
+    h1 {
+        font-size: 1.8rem; /* Ukuran judul lebih kecil agar tidak terpotong */
+    }
+
+    p {
+        font-size: 1rem; /* Ukuran teks pesan agar nyaman dibaca */
+    }
+
+    .container {
+        width: 90%; /* Kontainer pesan tidak memenuhi layar secara kaku */
+        margin: 0 auto;
+    }
+
+    img {
+        max-width: 100%; /* Agar gambar tidak keluar dari layar */
+        height: auto;
+    }
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.8); /* Transparan putih */
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 400px; /* Batas lebar di desktop */
+    width: 85%; /* Lebar di HP */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
