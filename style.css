@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: "Georgia", serif;
   background: #1e1e2f;
@@ -14,61 +15,100 @@ body {
   flex-direction: column;
   overflow: hidden;
 }
+
+/* --- PRELOADER --- */
+#loader-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #1e1e2f;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.8s ease;
+}
+
+.loader {
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: #ffb3c7;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- MAIN CONTENT --- */
 .intro {
   text-align: center;
   font-size: 1.4rem;
   margin-bottom: 30px;
   opacity: 1;
   transition: opacity 1s ease;
+  padding: 0 20px;
 }
+
 .btn {
-  padding: 10px 20px;
+  padding: 12px 25px;
   font-size: 1rem;
   background: #f5eeef;
   border: none;
-  border-radius: 20px;
+  border-radius: 25px;
   cursor: pointer;
   color: rgb(5, 2, 2);
   transition: 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
+
 .btn:hover {
   background: #b1acad;
+  transform: translateY(-2px);
 }
+
+/* --- LETTER --- */
 .letter {
   display: none;
-  /* Memberikan warna dasar krem dengan garis horizontal abu-abu seperti buku tulis */
   background: repeating-linear-gradient(
     to bottom,
     #fdf6e3 0px,
     #fdf6e3 27px,
     #d2d2d2 28px
   );
+  /* PAPER TEXTURE EFFECT */
+  background-image: 
+    repeating-linear-gradient(to bottom, #fdf6e3 0px, #fdf6e3 27px, #d2d2d2 28px),
+    url('https://www.transparenttextures.com/patterns/parchment.png'); 
+  
   color: #333;
-  /* Padding kiri disesuaikan agar teks tidak menabrak lubang kertas */
   padding: 30px 30px 30px 70px; 
   border-radius: 10px;
-  /* Menggunakan lebar 90% agar lebih pas di layar HP */
   width: 90%; 
   max-width: 500px;
-  /* Menggunakan min-height agar kertas bisa memanjang otomatis jika teksnya banyak */
   min-height: 400px; 
   height: auto; 
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   font-size: 1.1rem;
   line-height: 1.6;
   text-align: left;
   position: relative;
-  /* Menjaga format spasi dan baris baru dari JavaScript */
   white-space: pre-wrap;
-  /* Memastikan kata yang panjang tidak keluar dari kotak surat */
   overflow-wrap: break-word;
   font-family: "Courier New", monospace;
-  overflow: visible;
 }
+
 .letter p {
-  margin-top: -55px;
-  overflow: hidden;
+  margin-top: -5px; /* Disesuaikan agar pas di garis pertama */
 }
+
+/* Lubang binder  */
 .letter::before {
   content: "";
   position: absolute;
@@ -82,100 +122,69 @@ body {
   background-position: center;
   pointer-events: none;
 }
+
 .signature {
-  opacity: 0; /* Mulai dari transparan */
-  transition: opacity 3s ease-in; /* Muncul perlahan dalam 3 detik */
+  opacity: 0;
+  transition: opacity 3s ease-in;
   position: absolute;
-  bottom: -20px;
-  right: 6px;
-  width: 180px;
+  bottom: 10px;
+  right: 15px;
+  width: 150px;
   pointer-events: none;
   transform: rotate(-2deg);
 }
-/* Style untuk wadah bunga */
+
+/* --- FLOWER ANIMATION --- */
 .flower-fall-container {
-    position: fixed; /* Agar tetap di viewport */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none; /* Agar tidak menghalangi klik */
-    overflow: hidden; /* Pastikan bunga tidak keluar dari layar */
-    z-index: 999; /* Pastikan bunga di atas elemen lain */
-}
-
-/* Style untuk kelopak bunga individual */
-.petal {
-    position: absolute;
-    background-color: #ffcccc;
-    /* Bentuk tetesan/kelopak: pojok kiri atas dan kanan bawah membulat beda */
-    border-radius: 150% 0 150% 150%; 
-    opacity: 0.8;
-    animation: fall linear infinite, sway ease-in-out infinite;
     pointer-events: none;
+    overflow: hidden;
     z-index: 999;
 }
 
-/* Variasi ukuran kelopak bunga */
-.petal:nth-child(even) {
-    background-color: #ffe0e6; /* Warna pink yang sedikit beda */
-    animation-duration: 8s; /* Durasi jatuh lebih lama */
-    animation-delay: -2s; /* Mulai lebih cepat */
-    width: 12px;
-    height: 12px;
+.petal {
+    position: absolute;
+    background-color: #ffcccc;
+    border-radius: 150% 0 150% 150%; 
+    opacity: 0.8;
+    animation: fall linear infinite;
 }
 
-.petal:nth-child(odd) {
-    background-color: #ffb3c7; /* Warna pink agak gelap */
-    animation-duration: 10s; /* Durasi jatuh lebih lama */
-    animation-delay: -5s; /* Mulai lebih cepat */
-    width: 8px;
-    height: 8px;
-}
-
-/* Keyframes untuk animasi jatuh */
 @keyframes fall {
-    0% {
-        transform: translateY(-10vh) rotateZ(0deg); /* Mulai dari atas, tanpa rotasi */
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.8; /* Munculkan opacity */
-    }
-    100% {
-        transform: translateY(100vh) rotateZ(720deg); /* Jatuh ke bawah sambil berputar */
-        opacity: 0;
-    }
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
 }
+
+/* --- TOMBOL KONTROL --- */
 .volume-icon {
     position: fixed;
     top: 20px;
     right: 20px;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     cursor: pointer;
     z-index: 1000;
     background: rgba(255, 255, 255, 0.2);
-    padding: 10px;
-    border-radius: 50%;
     width: 45px;
     height: 45px;
-    display: flex;
+    display: none; /* Muncul via JS */
     justify-content: center;
     align-items: center;
-    transition: 0.3s;
-}
-
-.volume-icon:hover {
-    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    backdrop-filter: blur(5px);
 }
 
 .next-btn-fixed {
-  display: none; /* Tetap sembunyi di awal */
+  display: none;
   position: fixed;
-  top: 75px; /* Di bawah tombol volume (yang top-nya 20px + tinggi 45px + jarak) */
+  top: 75px;
   right: 20px;
   padding: 10px 15px;
-  background-color: rgba(255, 179, 199, 0.9); /* Pink transparan agar senada */
+  background-color: rgba(255, 179, 199, 0.9);
   color: white;
   border: none;
   border-radius: 15px;
@@ -185,44 +194,44 @@ body {
   cursor: pointer;
   z-index: 1000;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
 }
 
-.next-btn-fixed:hover {
-  background-color: #ff8fa3;
-  transform: scale(1.05);
-}
-
+/* --- RESPONSIVITAS HP (OPTIMASI MOBILE) --- */
 @media screen and (max-width: 600px) {
-    body {
-        padding: 15px; /* Memberi ruang di pinggir layar */
-    }
+  body {
+    padding: 10px;
+  }
 
-    h1 {
-        font-size: 1.8rem; /* Ukuran judul lebih kecil agar tidak terpotong */
-    }
+  .intro {
+    font-size: 1.1rem;
+  }
 
-    p {
-        font-size: 1rem; /* Ukuran teks pesan agar nyaman dibaca */
-    }
+  .letter {
+    padding: 25px 20px 25px 50px; 
+    font-size: 0.95rem;
+    min-height: 380px;
+    line-height: 1.5;
+  }
 
-    .container {
-        width: 90%; /* Kontainer pesan tidak memenuhi layar secara kaku */
-        margin: 0 auto;
-    }
+  .letter::before {
+    width: 20px;
+    background-size: 20px 35px; /* binder*/
+  }
 
-    img {
-        max-width: 100%; /* Agar gambar tidak keluar dari layar */
-        height: auto;
-    }
-}
+  .signature {
+    width: 120px;
+    bottom: 5px;
+  }
 
-.card {
-    background: rgba(255, 255, 255, 0.8); /* Transparan putih */
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 400px; /* Batas lebar di desktop */
-    width: 85%; /* Lebar di HP */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  .volume-icon {
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .next-btn-fixed {
+    top: 60px;
+    right: 10px;
+  }
 }
