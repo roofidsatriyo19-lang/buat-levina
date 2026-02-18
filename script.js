@@ -1,133 +1,142 @@
-const message = `Hai Levina...\n\nAku cuma mau bilang, selamat menempuh perjalanan baru di tempat PKL nanti ya. Aku tahu mungkin ada rasa deg-degan atau capek ke depannya, tapi aku yakin banget kamu bisa ngelewatin semuanya dengan hebat.\n\nJangan lupa jaga kesehatan, jangan terlalu diforsir, dan tetap jadi Levina yang selalu semangat.\n\nSemangat ya buat dunianya, dan semangat juga buat harimu!\n\nI'm always rooting for you.`;
+const message = `Hai Levina...\nAku cuma mau bilang, selamat menempuh perjalanan baru di tempat PKL nanti ya. Aku tahu mungkin ada rasa deg-degan atau capek ke depannya, tapi aku yakin banget kamu bisa ngelewatin semuanya dengan hebat.\n\nJangan lupa jaga kesehatan, jangan terlalu diforsir, dan tetap jadi Levina yang selalu semangat.\n\nSemangat ya buat dunianya, dan semangat juga buat harimu!\n\nI'm always rooting for you.`;
 
-const message2 = 'Oh iya..\n Ini sebagai balasan karna kamu menyemangati aku PKL waktu itu dan tidak hanya satu momen itu saja, masih banyak lainnya.\n\n Nikmati juga rasa capek ketika PKL nanti, semoga lelahmu menjadi lillah, dan setiap usahamu berbuah barokah.\n\n tutup mata ketika malam tiba, buka mata ketika matahari menyapa. karna dunia kerja butuh kamu yang segar, bukan kelopak mata yang lebar\n';
+const message2 = 'Oh iya..\n Ini sebagai balasan karna kamu menyemangati aku PKL hari itu dan tidak hanya satu momen itu saja, masih banyak lainnya.\n\n Nikmati juga rasa capek ketika PKL nanti, semoga lelahmu menjadi lillah, dan setiap usahamu berbuah barokah.\n\n tutup mata ketika malam tiba, buka mata ketika matahari menyapa. karna dunia kerja butuh kamu yang segar, bukan kelopak mata yang lebar\n';
 
-// --- LOGIC PRELOADER ---
+// --- PRELOADER ---
 window.addEventListener("load", () => {
   const loader = document.getElementById("loader-wrapper");
+  const savedTheme = localStorage.getItem('user-theme');
+  if (savedTheme) setTheme(savedTheme);
+
   if (loader) {
     setTimeout(() => {
       loader.style.opacity = "0";
       setTimeout(() => {
         loader.style.display = "none";
       }, 800);
-    }, 1500); // loading 1.5 sec
+    }, 1500);
   }
 });
 
+// --- THEME ENGINE ---
+function setTheme(themeName) {
+  document.documentElement.setAttribute('data-theme', themeName);
+  localStorage.setItem('user-theme', themeName);
+}
+
+// --- ENVELOPE LOGIC ---
+function openEnvelope() {
+  const wrapper = document.getElementById('envelopeWrapper');
+  const introText = document.getElementById("introText");
+  
+  wrapper.classList.add('open');
+  if (introText) introText.style.opacity = "0";
+
+  setTimeout(() => {
+    wrapper.style.opacity = '0';
+    setTimeout(() => {
+      wrapper.style.display = 'none';
+      if (introText) introText.style.display = "none";
+      showLetter(); 
+    }, 500);
+  }, 1200);
+}
+
+// --- MAIN LETTER LOGIC ---
 function showLetter() {
   const bgMusic = document.getElementById("bgMusic");
   const volIcon = document.getElementById("volumeToggle");
+  const letterBox = document.getElementById("letterBox");
   
   if (volIcon) volIcon.style.display = "flex";
+  letterBox.style.display = "block";
 
-  // ---  FADE-IN MUSIC HALUS ---
+  // Fade-in Music
   bgMusic.volume = 0;
-  bgMusic.play().catch(e => console.log("Menunggu interaksi user untuk musik"));
-
+  bgMusic.play().catch(() => console.log("User interaction needed for audio"));
+  
   let vol = 0;
   const fadeIn = setInterval(() => {
     if (vol < 0.6) {
-      vol += 0.02; // Transisi 
+      vol += 0.02;
       bgMusic.volume = Math.min(vol, 0.6);
     } else {
       clearInterval(fadeIn);
     }
   }, 150);
 
-  document.getElementById("introText").style.opacity = 0;
-  document.querySelector(".btn").style.display = "none";
-
-  setTimeout(() => {
-    const letterBox = document.getElementById("letterBox");
-    const typedText = document.getElementById("typedText");
+  // Start Typing Effect
+  typeWriter(message, "typedText", () => {
+    startFlowerFall();
     const signature = document.querySelector(".signature");
+    if (signature) signature.style.opacity = "1";
     
-    letterBox.style.display = "block";
-    
-    let i = 0;
-    function typeWriter() {
-      if (i < message.length) {
-        let char = message.charAt(i);
-        typedText.innerHTML += (char === '\n') ? '<br>' : char;
-        i++;
-
-        let delay = 50;
-        if (char === '.' || char === '?' || char === '!') delay = 800;
-        else if (char === ',') delay = 400;
-        else if (char === ' ') delay = 30;
-
-        setTimeout(typeWriter, delay);
-      } else {
-        startFlowerFall(); 
-        if (signature) {
-            signature.style.opacity = "1";
-            signature.style.transition = "opacity 2.5s ease-in";
-        }
-        
-        setTimeout(() => {
-          const btnNext = document.getElementById("btnNext");
-          if (btnNext) {
-              btnNext.style.display = "block";
-          }
-        }, 2000); 
-      }
-    }
-    typeWriter();
-  }, 1000);
+    setTimeout(() => {
+      const btnNext = document.getElementById("btnNext");
+      if (btnNext) btnNext.style.display = "block";
+    }, 2000);
+  });
 }
 
+// --- REUSABLE TYPING ENGINE ---
+function typeWriter(text, elementId, callback) {
+  const element = document.getElementById(elementId);
+  let i = 0;
+  
+  function typing() {
+    if (i < text.length) {
+      let char = text.charAt(i);
+      element.innerHTML += (char === '\n') ? '<br>' : char;
+      i++;
+
+      // LOGIKA AUTO-SCROLL HALAMAN: Otomatis scroll layar ke bawah mengikuti teks
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+
+      let delay = 50;
+      if (['.', '?', '!'].includes(char)) delay = 800;
+      else if (char === ',') delay = 400;
+      else if (char === ' ') delay = 30;
+
+      setTimeout(typing, delay);
+    } else if (callback) {
+      callback();
+    }
+  }
+  typing();
+}
+
+// --- SECOND LETTER LOGIC ---
 function readSecondLetter() {
   const typedText = document.getElementById("typedText");
   const btnNext = document.getElementById("btnNext");
   const signature = document.querySelector(".signature");
 
   if (btnNext) btnNext.style.display = "none";
-  if (signature) {
-      signature.style.transition = "opacity 1s ease";
-      signature.style.opacity = "0";
-  }
-
+  if (signature) signature.style.opacity = "0";
+  
   typedText.style.opacity = "0";
   
   setTimeout(() => {
     typedText.innerHTML = ""; 
     typedText.style.opacity = "1";
     
-    let j = 0;
-    function typeWriter2() {
-      if (j < message2.length) {
-        let char = message2.charAt(j);
-        typedText.innerHTML += (char === '\n') ? '<br>' : char;
-        j++;
-
-        let delay = 50;
-        if (char === '.' || char === '!' || char === '?') delay = 800;
-        else if (char === ',') delay = 400;
-
-        setTimeout(typeWriter2, delay);
-      } else {
-        if (signature) signature.style.opacity = "1";
-        
-        // show a sticker in the end
-        addFloatingSticker();
-      }
-    }
-    typeWriter2();
+    typeWriter(message2, "typedText", () => {
+      if (signature) signature.style.opacity = "1";
+      addFloatingSticker();
+    });
   }, 1000);
 }
 
-// show emoji in the end
+// --- EXTRAS ---
 function addFloatingSticker() {
   const letter = document.getElementById("letterBox");
   const sticker = document.createElement("div");
   sticker.innerHTML = "✨💖✨😜";
-  sticker.style.position = "absolute";
-  sticker.style.bottom = "20px";
-  sticker.style.left = "30px";
-  sticker.style.fontSize = "1.5rem";
-  sticker.style.opacity = "0";
-  sticker.style.transition = "opacity 2s ease";
+  sticker.className = "floating-sticker"; // Tambahkan class untuk styling di CSS jika perlu
+  sticker.style.cssText = "position:absolute; bottom:20px; left:30px; font-size:1.5rem; opacity:0; transition:opacity 2s ease;";
   letter.appendChild(sticker);
   setTimeout(() => sticker.style.opacity = "1", 500);
 }

@@ -8,20 +8,35 @@
   </head>
   <body>
     <div id="loader-wrapper">
-      <div class="loader"></div>
-      <p>Menyiapkan surat...</p>
-    </div>
-    <div class="intro" id="introText">
-      i hope you read this, even if it's too late.
-    </div>
-    
-    <button class="btn" onclick="showLetter()">Read it</button>
+  <div class="loader"></div>
+  <p>Menyiapkan surat...</p>
+</div>
 
-    <div class="letter" id="letterBox">
-      <p id="typedText"></p>
-      <img src="ttd.png" alt="Signature" class="signature" />
-      
+<div class="theme-menu">
+  <button onclick="setTheme('midnight')">🌌 Midnight</button>
+  <button onclick="setTheme('rose')">🌸 Rose</button>
+  <button onclick="setTheme('parchment')">📜 Vintage</button>
+</div>
+
+<div class="container">
+  <div class="intro" id="introText">
+    i hope you read this, even if it's too late.
+  </div>
+
+  <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
+    <div class="envelope">
+      <div class="flap"></div>
+      <div class="pocket"></div>
+      <div class="letter-preview"></div>
     </div>
+    <p class="tap-instruction">Tap to Read This</p>
+  </div>
+
+  <div class="letter" id="letterBox">
+    <p id="typedText"></p>
+    <img src="ttd.png" alt="Signature" class="signature" />
+  </div>
+</div>
 
     <audio id="bgMusic" loop>
         <source src="about-you.mp3" type="audio/mpeg" />
