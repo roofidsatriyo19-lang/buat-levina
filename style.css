@@ -197,41 +197,47 @@ body {
 }
 
 /* --- RESPONSIVITAS HP (OPTIMASI MOBILE) --- */
+/* --- PERBAIKAN KHUSUS MOBILE --- */
 @media screen and (max-width: 600px) {
   body {
-    padding: 10px;
+    padding: 10px; /* Supaya kertas tidak nempel banget ke pinggir layar HP */
   }
 
   .intro {
-    font-size: 1.1rem;
+    font-size: 1.1rem; /* Ukuran teks intro dikecilkan sedikit */
+    padding: 0 15px;
   }
 
   .letter {
-    padding: 25px 20px 25px 50px; 
-    font-size: 0.95rem;
-    min-height: 380px;
-    line-height: 1.5;
+    width: 95%; 
+    padding: 20px 15px 20px 45px; 
+    font-size: 0.9rem; 
+    min-height: 300px; 
+    line-height: 1.55; 
+    background-size: 100% 28px; 
   }
 
   .letter::before {
-    width: 20px;
-    background-size: 20px 35px; /* binder*/
+    width: 20px; 
+    background-size: 20px 35px; 
   }
 
   .signature {
-    width: 120px;
+    width: 120px; 
     bottom: 5px;
+    right: 10px;
   }
 
   .volume-icon {
     width: 40px;
     height: 40px;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: 15px;
   }
 
   .next-btn-fixed {
-    top: 60px;
-    right: 10px;
+    top: 65px; 
+    right: 15px;
+    font-size: 0.75rem;
   }
 }
