@@ -1,6 +1,31 @@
-const message = `Hai Levina...\n\nAku cuma mau bilang, selamat menempuh perjalanan baru di tempat PKL nanti ya. Aku tahu mungkin ada rasa deg-degan atau capek ke depannya, tapi aku yakin banget kamu bisa ngelewatin semuanya dengan hebat.\n\nJangan lupa jaga kesehatan, jangan terlalu diforsir, dan tetap jadi Levina yang selalu semangat.\n\nSemangat ya buat dunianya, dan semangat juga buat harimu!\n\nI'm always rooting for you.`;
+// Menggunakan 'let' agar isi pesan bisa diubah oleh fungsi saveName
+let message = `Hai Levina...\nAku cuma mau bilang, selamat menempuh perjalanan baru di tempat PKL nanti ya. Aku tahu mungkin ada rasa deg-degan atau capek ke depannya, tapi aku yakin banget kamu bisa ngelewatin semuanya dengan hebat.\n\nJangan lupa jaga kesehatan, jangan terlalu diforsir, dan tetap jadi Levina yang selalu semangat.\n\nSemangat ya buat dunianya, dan semangat juga buat harimu!\n\nI'm always rooting for you.`;
 
-const message2 = 'Oh iya..\n\nIni sebagai balasan karna kamu menyemangati aku PKL waktu itu dan tidak hanya satu momen itu saja, masih banyak lainnya.\n\nNikmati juga rasa capek ketika PKL nanti, semoga lelahmu menjadi lillah, dan setiap usahamu berbuah barokah.\n\ntutup mata ketika malam tiba, buka mata ketika matahari menyapa. karna dunia kerja butuh kamu yang segar, bukan kelopak mata yang lebar\n';
+let message2 = 'Oh iya..\n\nIni sebagai balasan karna kamu menyemangati aku PKL waktu itu dan tidak hanya satu momen itu saja, masih banyak lainnya.\n\nNikmati juga rasa capek ketika PKL nanti, semoga lelahmu menjadi lillah, dan setiap usahamu berbuah barokah.\n\ntutup mata ketika malam tiba, buka mata ketika matahari menyapa. karna dunia kerja butuh kamu yang segar, bukan kelopak mata yang lebar\n';
+
+// --- FITUR NO 3: SIMPAN NAMA ---
+function saveName() {
+    const input = document.getElementById('userName');
+    const name = input.value.trim();
+    
+    if (name !== "") {
+        // Ganti semua kata "Levina" di pesan dengan nama yang diinput
+        message = message.replace(/Levina/g, name);
+        message2 = message2.replace(/Levina/g, name);
+
+        const section = document.getElementById('nameInputSection');
+        section.style.opacity = "0";
+        setTimeout(() => {
+            section.style.display = "none";
+            const env = document.getElementById('envelopeWrapper');
+            env.style.display = "block";
+            env.style.opacity = "0";
+            setTimeout(() => env.style.opacity = "1", 50);
+        }, 500);
+    } else {
+        alert("Masukkan namamu dulu yaa :)");
+    }
+}
 
 // --- LOGIC PRELOADER ---
 window.addEventListener("load", () => {
@@ -18,7 +43,6 @@ window.addEventListener("load", () => {
   }
 });
 
-// --- THEME ENGINE ---
 function setTheme(themeName) {
   document.documentElement.setAttribute('data-theme', themeName);
   localStorage.setItem('user-theme', themeName);
@@ -51,9 +75,8 @@ function showLetter() {
   if (volIcon) volIcon.style.display = "flex";
   letterBox.style.display = "block";
 
-  // Fade-in Music
   bgMusic.volume = 0;
-  bgMusic.play().catch(() => console.log("User interaction needed for audio"));
+  bgMusic.play().catch(() => console.log("Audio play blocked"));
   
   let vol = 0;
   const fadeIn = setInterval(() => {
@@ -65,7 +88,6 @@ function showLetter() {
     }
   }, 150);
 
-  // Start Typing Effect
   typeWriter(message, "typedText", () => {
     startFlowerFall();
     const signature = document.querySelector(".signature");
@@ -74,11 +96,11 @@ function showLetter() {
     setTimeout(() => {
       const btnNext = document.getElementById("btnNext");
       if (btnNext) btnNext.style.display = "block";
+      scrollBottom();
     }, 2000);
   });
 }
 
-// --- REUSABLE TYPING ENGINE (WITH GLOBAL AUTO-SCROLL) ---
 function typeWriter(text, elementId, callback) {
   const element = document.getElementById(elementId);
   let i = 0;
@@ -89,11 +111,7 @@ function typeWriter(text, elementId, callback) {
       element.innerHTML += (char === '\n') ? '<br>' : char;
       i++;
 
-      // LOGIKA SCROLL: Layar otomatis turun mengikuti teks karena kertas memanjang
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth'
-      });
+      scrollBottom();
 
       let delay = 50;
       if (['.', '?', '!'].includes(char)) delay = 800;
@@ -106,6 +124,13 @@ function typeWriter(text, elementId, callback) {
     }
   }
   typing();
+}
+
+function scrollBottom() {
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+    });
 }
 
 // --- SECOND LETTER LOGIC ---
@@ -122,29 +147,33 @@ function readSecondLetter() {
   setTimeout(() => {
     typedText.innerHTML = ""; 
     typedText.style.opacity = "1";
-    
-    // Reset posisi scroll ke atas saat mulai surat kedua
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     typeWriter(message2, "typedText", () => {
       if (signature) signature.style.opacity = "1";
       addFloatingSticker();
+      
+      setTimeout(() => {
+          const reply = document.getElementById('replySection');
+          if(reply) {
+              reply.style.display = "block";
+              scrollBottom();
+          }
+      }, 1000);
     });
   }, 1000);
 }
 
-// --- EXTRAS ---
 function addFloatingSticker() {
   const element = document.getElementById("typedText");
   const sticker = document.createElement("div");
   sticker.innerHTML = "✨💖✨😜";
-  // Sticker diletakkan di akhir teks agar tidak menutupi tulisan
   sticker.style.cssText = "margin-top:20px; font-size:1.5rem; opacity:0; transition:opacity 2s ease; text-align:right;";
   element.appendChild(sticker);
   
   setTimeout(() => {
     sticker.style.opacity = "1";
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    scrollBottom();
   }, 500);
 }
 
@@ -173,3 +202,42 @@ function startFlowerFall() {
         container.appendChild(petal);
     }
 }
+
+// --- FORM HANDLING ---
+document.addEventListener("DOMContentLoaded", () => {
+    const replyForm = document.getElementById("replyForm");
+    const statusNote = document.getElementById("thankYouNote");
+
+    if (replyForm) {
+        replyForm.addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const data = new FormData(event.target);
+            
+            // Mengubah teks tombol saat loading
+            const btn = event.target.querySelector("button");
+            const originalBtnText = btn.innerText;
+            btn.innerText = "Mengirim...";
+            btn.disabled = true;
+
+            fetch(event.target.action, {
+                method: 'POST',
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    statusNote.style.display = "block";
+                    replyForm.style.display = "none";
+                    scrollBottom();
+                } else {
+                    btn.innerText = originalBtnText;
+                    btn.disabled = false;
+                    alert("Gagal terkirim. Pastikan FORM_ID sudah benar.");
+                }
+            }).catch(error => {
+                btn.innerText = originalBtnText;
+                btn.disabled = false;
+                alert("Terjadi kesalahan koneksi.");
+            });
+        });
+    }
+});
