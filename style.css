@@ -1,4 +1,4 @@
-/* --- ROOT VARIABLES (The Heart of Themes) --- */
+/* --- ROOT VARIABLES --- */
 :root {
   --bg-color: #1e1e2f;
   --text-color: #ffffff;
@@ -37,25 +37,41 @@ body {
   font-family: "Georgia", serif;
   background: var(--bg-color);
   color: var(--text-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* Gunakan min-height agar background selalu penuh */
   min-height: 100vh;
-  flex-direction: column;
-  /* Ubah overflow hidden menjadi auto agar surat panjang bisa di-scroll satu halaman */
+  /* Scroll layar utama diaktifkan */
   overflow-y: auto; 
   overflow-x: hidden;
-  padding: 80px 0; /* Memberi ruang agar surat tidak mepet atas/bawah */
+  padding: 100px 20px 80px 20px; 
   transition: background 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* --- THEME MENU --- */
+/* CONTAINER UTAMA (Kunci agar tidak miring) */
+.container {
+  width: 100%;
+  max-width: 500px; /* Batas lebar konten agar cantik di Desktop & HP */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* --- THEME MENU (Fixed & Centered) --- */
 .theme-menu {
   position: fixed;
   top: 20px;
+  left: 50%;
+  transform: translateX(-50%); /* Menjaga menu benar-benar di tengah horizontal */
   display: flex;
   gap: 10px;
   z-index: 1001;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 30px;
+  backdrop-filter: blur(5px);
 }
 
 .theme-menu button {
@@ -65,15 +81,9 @@ body {
   cursor: pointer;
   font-family: 'Courier New', monospace;
   font-size: 11px;
-  background: rgba(255, 255, 255, 0.2);
-  color: var(--text-color);
-  backdrop-filter: blur(5px);
-  transition: 0.3s;
-}
-
-.theme-menu button:hover {
   background: var(--accent-color);
   color: white;
+  transition: 0.3s;
 }
 
 /* --- PRELOADER --- */
@@ -98,14 +108,13 @@ body {
   animation: spin 1s linear infinite;
   margin-bottom: 15px;
 }
-
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* --- ENVELOPE (AMPLOP) --- */
 .envelope-wrapper {
   position: relative;
   cursor: pointer;
-  margin-top: 20px;
+  margin-top: 40px;
   transition: transform 0.3s ease, opacity 0.5s ease;
   z-index: 10;
 }
@@ -154,7 +163,7 @@ body {
   opacity: 0.7;
 }
 
-/* --- LETTER (KERTAS SURAT) --- */
+/* --- LETTER (KERTAS SURAT ELASTIS) --- */
 .letter {
   display: none;
   background: var(--paper-bg);
@@ -162,16 +171,12 @@ body {
     repeating-linear-gradient(to bottom, transparent 0px, transparent 27px, var(--paper-line) 28px),
     url('https://www.transparenttextures.com/patterns/parchment.png'); 
   color: var(--paper-text);
-  padding: 40px 30px 40px 60px; 
+  padding: 40px 30px 60px 60px; /* Padding bawah ditambah untuk ruang tanda tangan */
   border-radius: 5px;
-  width: 90%; 
-  max-width: 500px;
-
-  /* KUNCI: Kembali ke elastis mengikuti teks */
+  width: 100%; /* Mengikuti lebar container */
   height: auto; 
   min-height: 400px; 
-
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   font-family: "Courier New", monospace;
   position: relative;
   line-height: 28px;
@@ -184,22 +189,22 @@ body {
   content: "";
   position: absolute;
   top: 0; left: 10px;
-  width: 20px; 
-  height: 100%;
+  width: 20px; height: 100%;
   background-image: radial-gradient(circle, var(--bg-color) 5px, transparent 6px);
   background-size: 20px 40px;
 }
 
+/* Perbaikan Tanda Tangan: Tidak Absolute agar tidak tumpang tindih */
 .signature {
   opacity: 0;
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+  display: block;
+  margin-top: 30px;
+  margin-left: auto; /* Tarik ke kanan */
   width: 120px;
-  transition: opacity 2s ease;
+  transition: opacity 2.5s ease;
 }
 
-/* --- CONTROLS & ANIMATION --- */
+/* --- CONTROLS --- */
 .volume-icon {
   position: fixed;
   bottom: 20px;
@@ -212,6 +217,7 @@ body {
   align-items: center;
   cursor: pointer;
   z-index: 1000;
+  backdrop-filter: blur(5px);
 }
 
 .next-btn-fixed {
@@ -226,23 +232,22 @@ body {
   border-radius: 20px;
   cursor: pointer;
   z-index: 1000;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  font-weight: bold;
 }
 
+/* --- ANIMASI BUNGA --- */
 .flower-fall-container {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 999;
 }
-
 .petal {
   position: absolute;
-  background-color: #ffcccc;
   border-radius: 150% 0 150% 150%; 
   animation: fall linear infinite;
 }
-
 @keyframes fall {
   0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
   10% { opacity: 0.8; }
@@ -251,8 +256,16 @@ body {
 
 /* --- MOBILE OPTIMIZATION --- */
 @media screen and (max-width: 600px) {
+  body {
+    padding: 80px 15px 40px 15px;
+  }
   .envelope { width: 240px; height: 150px; }
   .flap { border-left-width: 120px; border-right-width: 120px; border-top-width: 80px; }
-  .letter { font-size: 0.9rem; padding: 30px 20px 30px 45px; }
-  .theme-menu { top: 10px; scale: 0.9; }
+  .letter { 
+    font-size: 0.9rem; 
+    padding: 40px 15px 50px 45px; 
+    line-height: 27px;
+  }
+  .theme-menu { scale: 0.85; top: 10px; }
+  .next-btn-fixed { font-size: 0.8rem; }
 }

@@ -1,8 +1,8 @@
-const message = `Hai Levina...\nAku cuma mau bilang, selamat menempuh perjalanan baru di tempat PKL nanti ya. Aku tahu mungkin ada rasa deg-degan atau capek ke depannya, tapi aku yakin banget kamu bisa ngelewatin semuanya dengan hebat.\n\nJangan lupa jaga kesehatan, jangan terlalu diforsir, dan tetap jadi Levina yang selalu semangat.\n\nSemangat ya buat dunianya, dan semangat juga buat harimu!\n\nI'm always rooting for you.`;
+const message = `Hai Levina...\n\nAku cuma mau bilang, selamat menempuh perjalanan baru di tempat PKL nanti ya. Aku tahu mungkin ada rasa deg-degan atau capek ke depannya, tapi aku yakin banget kamu bisa ngelewatin semuanya dengan hebat.\n\nJangan lupa jaga kesehatan, jangan terlalu diforsir, dan tetap jadi Levina yang selalu semangat.\n\nSemangat ya buat dunianya, dan semangat juga buat harimu!\n\nI'm always rooting for you.`;
 
-const message2 = 'Oh iya..\n Ini sebagai balasan karna kamu menyemangati aku PKL hari itu dan tidak hanya satu momen itu saja, masih banyak lainnya.\n\n Nikmati juga rasa capek ketika PKL nanti, semoga lelahmu menjadi lillah, dan setiap usahamu berbuah barokah.\n\n tutup mata ketika malam tiba, buka mata ketika matahari menyapa. karna dunia kerja butuh kamu yang segar, bukan kelopak mata yang lebar\n';
+const message2 = 'Oh iya..\n\nIni sebagai balasan karna kamu menyemangati aku PKL waktu itu dan tidak hanya satu momen itu saja, masih banyak lainnya.\n\nNikmati juga rasa capek ketika PKL nanti, semoga lelahmu menjadi lillah, dan setiap usahamu berbuah barokah.\n\ntutup mata ketika malam tiba, buka mata ketika matahari menyapa. karna dunia kerja butuh kamu yang segar, bukan kelopak mata yang lebar\n';
 
-// --- PRELOADER ---
+// --- LOGIC PRELOADER ---
 window.addEventListener("load", () => {
   const loader = document.getElementById("loader-wrapper");
   const savedTheme = localStorage.getItem('user-theme');
@@ -78,7 +78,7 @@ function showLetter() {
   });
 }
 
-// --- REUSABLE TYPING ENGINE ---
+// --- REUSABLE TYPING ENGINE (WITH GLOBAL AUTO-SCROLL) ---
 function typeWriter(text, elementId, callback) {
   const element = document.getElementById(elementId);
   let i = 0;
@@ -89,7 +89,7 @@ function typeWriter(text, elementId, callback) {
       element.innerHTML += (char === '\n') ? '<br>' : char;
       i++;
 
-      // LOGIKA AUTO-SCROLL HALAMAN: Otomatis scroll layar ke bawah mengikuti teks
+      // LOGIKA SCROLL: Layar otomatis turun mengikuti teks karena kertas memanjang
       window.scrollTo({
         top: document.body.scrollHeight,
         behavior: 'smooth'
@@ -123,6 +123,9 @@ function readSecondLetter() {
     typedText.innerHTML = ""; 
     typedText.style.opacity = "1";
     
+    // Reset posisi scroll ke atas saat mulai surat kedua
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     typeWriter(message2, "typedText", () => {
       if (signature) signature.style.opacity = "1";
       addFloatingSticker();
@@ -132,13 +135,17 @@ function readSecondLetter() {
 
 // --- EXTRAS ---
 function addFloatingSticker() {
-  const letter = document.getElementById("letterBox");
+  const element = document.getElementById("typedText");
   const sticker = document.createElement("div");
   sticker.innerHTML = "✨💖✨😜";
-  sticker.className = "floating-sticker"; // Tambahkan class untuk styling di CSS jika perlu
-  sticker.style.cssText = "position:absolute; bottom:20px; left:30px; font-size:1.5rem; opacity:0; transition:opacity 2s ease;";
-  letter.appendChild(sticker);
-  setTimeout(() => sticker.style.opacity = "1", 500);
+  // Sticker diletakkan di akhir teks agar tidak menutupi tulisan
+  sticker.style.cssText = "margin-top:20px; font-size:1.5rem; opacity:0; transition:opacity 2s ease; text-align:right;";
+  element.appendChild(sticker);
+  
+  setTimeout(() => {
+    sticker.style.opacity = "1";
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }, 500);
 }
 
 function toggleMute() {
