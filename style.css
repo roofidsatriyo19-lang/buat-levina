@@ -37,16 +37,19 @@ body {
   font-family: "Georgia", serif;
   background: var(--bg-color);
   color: var(--text-color);
-  /* Gunakan min-height agar background selalu penuh */
-  min-height: 100vh;
-  /* Scroll layar utama diaktifkan */
-  overflow-y: auto; 
-  overflow-x: hidden;
-  padding: 100px 20px 80px 20px; 
-  transition: background 0.5s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
+  overflow-y: auto; 
+  overflow-x: hidden;
+  
+  /* TAMBAHKAN/UBAH PADDING ATAS: 
+     Ini akan mendorong amplop lebih ke bawah dari menu tema */
+  padding-top: 180px; 
+  padding-bottom: 50px;
+  
+  transition: background 0.5s ease;
 }
 
 /* CONTAINER UTAMA (Kunci agar tidak miring) */
@@ -114,7 +117,7 @@ body {
 .envelope-wrapper {
   position: relative;
   cursor: pointer;
-  margin-top: 40px;
+  margin-top: 50px;
   transition: transform 0.3s ease, opacity 0.5s ease;
   z-index: 10;
 }
